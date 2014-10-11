@@ -1,0 +1,19 @@
+{
+  "name": "react-carousel",
+  "version": "1.0.0",
+  "description": "A carousel written in react",
+  "main": "Carousel.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "carousel",
+    "react"
+  ],
+  "dependencies": {
+    "react": "^0.11.2",
+    "react-swipeable": "^1.0.0"
+  },
+  "author": "Josh Perez <josh@goatslacker.com>",
+  "license": "MIT"
+}
