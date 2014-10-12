@@ -4,11 +4,14 @@ var cx = React.addons.classSet
 var Swipeable = require('react-swipeable')
 
 var MIN_MOVEMENT = 100
+var MAX_TRANSITION_TIME = 350
 
 var Carousel = React.createClass({
   getInitialState: function () {
     return {
+      prevIndex: 0,
       currentIndex: 0,
+      itemWidths: Array(this.props.children.length),
       itemStart: Array(this.props.children.length),
       containerWidth: 0,
       delta: 0
@@ -30,6 +33,7 @@ var Carousel = React.createClass({
     }, [0])
 
     this.setState({
+      itemWidths: widths,
       itemStart: startPos,
       containerWidth: totalWidth
     })
@@ -41,17 +45,21 @@ var Carousel = React.createClass({
 
   doMoveImage: function (x) {
     var index = this.state.currentIndex
-    if (x > 0) {
+    var imageMoveIndex = this.state.currentIndex
+    if (x < 0) {
       if (index > 0) {
         index = index - 1
+        imageMoveIndex = index
       }
-    } else if (x < 0) {
+    } else if (x > 0) {
       if (index < this.props.children.length - 1) {
         index = index + 1
+        imageMoveIndex = imageMoveIndex
       }
     }
 
     this.setState({
+      prevIndex: imageMoveIndex,
       currentIndex: index,
       delta: 0
     })
@@ -62,7 +70,10 @@ var Carousel = React.createClass({
   },
 
   maybeMoveImage: function (e, x) {
-    if (x > MIN_MOVEMENT) {
+    if (Math.abs(x) < MIN_MOVEMENT) {
+      this.setState({
+        delta: 0
+      })
       return
     }
     this.doMoveImage(x)
@@ -89,6 +100,12 @@ var Carousel = React.createClass({
       'animate-carousel': this.state.delta === 0
     })
 
+    var transitionTime = Math.min(
+      this.state.itemWidths[this.state.prevIndex] / 2,
+      MAX_TRANSITION_TIME
+    )
+    var transition = 'all ' + transitionTime + 'ms ease-out'
+
     return React.DOM.div(
       { className: 'carousel' },
       Swipeable({
@@ -96,10 +113,11 @@ var Carousel = React.createClass({
         onSwipingRight: this.prevImageScroll,
         onSwipingLeft: this.nextImageScroll,
         onSwiped: this.maybeMoveImage,
-        className: cxContainer,
+        className: 'carousel-container',
         ref: 'carouselContainer',
         style: {
           '-webkit-transform': 'translateX(' + delta + 'px)',
+          transition: this.state.delta === 0 ? transition : 'none',
           width: this.state.containerWidth + 'px'
         }
       }, this.props.children.map(function (item, i) {

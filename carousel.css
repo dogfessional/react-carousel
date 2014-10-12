@@ -19,7 +19,3 @@
 .carousel-container .carousel-item {
   float: left;
 }
-
-.animate-carousel {
-  transition: all 100ms ease-out;
-}
