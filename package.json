@@ -8,12 +8,17 @@
   },
   "keywords": [
     "carousel",
-    "react"
+    "react",
+    "react-component"
   ],
   "dependencies": {
     "react": "^0.11.2",
     "react-swipeable": "^1.0.0"
   },
   "author": "Josh Perez <josh@goatslacker.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/dogfessional/react-carousel.git"
+  },
   "license": "MIT"
 }
