@@ -3,6 +3,8 @@ var cx = React.addons.classSet
 
 var Swipeable = require('react-swipeable')
 
+var MIN_MOVEMENT = 100
+
 var Carousel = React.createClass({
   getInitialState: function () {
     return {
@@ -37,17 +39,15 @@ var Carousel = React.createClass({
     return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 1000)
   },
 
-  moveImage: function (e, x, y) {
+  doMoveImage: function (x) {
     var index = this.state.currentIndex
-    if (x > 100) {
-      if (this.state.delta > 0) {
-        if (index > 0) {
-          index = index - 1
-        }
-      } else if (this.state.delta < 0) {
-        if (index < this.props.children.length - 1) {
-          index = index + 1
-        }
+    if (x > 0) {
+      if (index > 0) {
+        index = index - 1
+      }
+    } else if (x < 0) {
+      if (index < this.props.children.length - 1) {
+        index = index + 1
       }
     }
 
@@ -55,6 +55,17 @@ var Carousel = React.createClass({
       currentIndex: index,
       delta: 0
     })
+  },
+
+  moveImage: function (e, x) {
+    this.doMoveImage(x)
+  },
+
+  maybeMoveImage: function (e, x) {
+    if (x > MIN_MOVEMENT) {
+      return
+    }
+    this.doMoveImage(x)
   },
 
   prevImageScroll: function (e, delta) {
@@ -81,9 +92,10 @@ var Carousel = React.createClass({
     return React.DOM.div(
       { className: 'carousel' },
       Swipeable({
+        onFlick: this.moveImage,
         onSwipingRight: this.prevImageScroll,
         onSwipingLeft: this.nextImageScroll,
-        onSwiped: this.moveImage,
+        onSwiped: this.maybeMoveImage,
         className: cxContainer,
         ref: 'carouselContainer',
         style: {

@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "react": "^0.11.2",
-    "react-swipeable": "^1.0.0"
+    "react-swipeable": "^1.1.1"
   },
   "author": "Josh Perez <josh@goatslacker.com>",
   "repository": {
