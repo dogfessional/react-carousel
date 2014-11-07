@@ -3,9 +3,6 @@ var cx = React.addons.classSet
 
 var Swipeable = require('react-swipeable')
 
-var MIN_MOVEMENT = 100
-var MAX_TRANSITION_TIME = 350
-
 var Carousel = React.createClass({
   getInitialState: function () {
     return {
@@ -43,7 +40,7 @@ var Carousel = React.createClass({
     return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 1000)
   },
 
-  doMoveImage: function (x) {
+  doMoveImage: function (_, x) {
     var index = this.state.currentIndex
     var imageMoveIndex = this.state.currentIndex
     if (x < 0) {
@@ -63,20 +60,6 @@ var Carousel = React.createClass({
       currentIndex: index,
       delta: 0
     })
-  },
-
-  moveImage: function (e, x) {
-    this.doMoveImage(x)
-  },
-
-  maybeMoveImage: function (e, x) {
-    if (Math.abs(x) < MIN_MOVEMENT) {
-      this.setState({
-        delta: 0
-      })
-      return
-    }
-    this.doMoveImage(x)
   },
 
   prevImageScroll: function (e, delta) {
@@ -100,29 +83,27 @@ var Carousel = React.createClass({
       'animate-carousel': this.state.delta === 0
     })
 
-    var transitionTime = Math.min(
-      this.state.itemWidths[this.state.prevIndex] / 2,
-      MAX_TRANSITION_TIME
-    )
-    var transition = 'all ' + transitionTime + 'ms ease-out'
+    var transition = 'all 250ms ease-out'
 
-    return React.DOM.div(
-      { className: 'carousel' },
-      Swipeable({
-        onFlick: this.moveImage,
-        onSwipingRight: this.prevImageScroll,
-        onSwipingLeft: this.nextImageScroll,
-        onSwiped: this.maybeMoveImage,
-        className: 'carousel-container',
-        ref: 'carouselContainer',
-        style: {
-          '-webkit-transform': 'translateX(' + delta + 'px)',
-          transition: this.state.delta === 0 ? transition : 'none',
-          width: this.state.containerWidth + 'px'
-        }
-      }, this.props.children.map(function (item, i) {
-        return React.DOM.div({ key: i, className: 'carousel-item' }, item)
-      }))
+    return this.transferPropsTo(
+      React.DOM.div(
+        { className: 'carousel' },
+        Swipeable({
+          onFlick: this.doMoveImage,
+          onSwipingRight: this.prevImageScroll,
+          onSwipingLeft: this.nextImageScroll,
+          onSwiped: this.doMoveImage,
+          className: 'carousel-container',
+          ref: 'carouselContainer',
+          style: {
+            '-webkit-transform': 'translateX(' + delta + 'px)',
+            transition: this.state.delta === 0 ? transition : 'none',
+            width: this.state.containerWidth + 'px'
+          }
+        }, this.props.children.map(function (item, i) {
+          return React.DOM.div({ key: i, className: 'carousel-item' }, item)
+        }))
+      )
     )
   }
 })
