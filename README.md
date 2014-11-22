@@ -4,25 +4,29 @@
 
 ## Install
 
-    npm install react-carousel
+```sh
+npm install react-carousel
+```
 
 ## Use
 
-    var Carousel = require('react-carousel')
+```js
+var Carousel = require('react-carousel');
 
-    var SampleComponent = React.createClass({
-      render: function () {
-        return (
-          <Carousel>
-            <img src="http://fillmurray.com/300/300" />
-            <img src="http://fillmurray.com/600/300" />
-            <img src="http://fillmurray.com/100/300" />
-            <img src="http://fillmurray.com/400/300" />
-            <img src="http://fillmurray.com/200/300" />
-          </Carousel>
-        )
-      }
-    })
+var SampleComponent = React.createClass({
+  render: function () {
+    return (
+      <Carousel>
+        <img src="http://fillmurray.com/300/300" />
+        <img src="http://fillmurray.com/600/300" />
+        <img src="http://fillmurray.com/100/300" />
+        <img src="http://fillmurray.com/400/300" />
+        <img src="http://fillmurray.com/200/300" />
+      </Carousel>
+    )
+  }
+});
+```
 
 # Props
 
