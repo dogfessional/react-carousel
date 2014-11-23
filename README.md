@@ -8,6 +8,12 @@
 npm install react-carousel
 ```
 
+## Demo
+
+Check it out on a mobile device:
+
+http://dogfessional.github.io/react-carousel/
+
 ## Use
 
 ```js
