@@ -1,20 +1,20 @@
 var React = require('react')
 var Carousel = require('../')
 
-var SampleComponent = React.createClass({
+var SampleComponent = React.createFactory(React.createClass({
   render: function () {
     return (
       <div style={{ width: 380 }}>
         <Carousel>
-          <img src="/306x306.png" />
-          <img src="/306x306.png" />
-          <img src="/306x306.png" />
-          <img src="/306x306.png" />
-          <img src="/306x306.png" />
+          <img src="http://www.fillmurray.com/300/300" />
+          <img src="http://www.fillmurray.com/300/299" />
+          <img src="http://www.fillmurray.com/300/298" />
+          <img src="http://www.fillmurray.com/300/301" />
+          <img src="http://www.fillmurray.com/300/302" />
         </Carousel>
       </div>
     )
   }
-})
+}))
 
-React.renderComponent(SampleComponent(), document.body)
+React.render(SampleComponent(), document.body)

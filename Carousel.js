@@ -1,7 +1,6 @@
-var React = require('react/addons')
-var cx = React.addons.classSet
+var React = require('react')
 
-var Swipeable = require('react-swipeable')
+var Swipeable = React.createFactory(require('react-swipeable'))
 
 var Carousel = React.createClass({
   getInitialState: function () {
@@ -78,33 +77,30 @@ var Carousel = React.createClass({
     var delta = this.state.delta +
       (0 - this.state.itemStart[this.state.currentIndex])
 
-    var cxContainer = cx({
-      'carousel-container': true,
-      'animate-carousel': this.state.delta === 0
-    })
-
     var transition = 'all 250ms ease-out'
 
-    return this.transferPropsTo(
-      React.DOM.div(
-        { className: 'carousel' },
-        Swipeable({
-          onFlick: this.doMoveImage,
-          onSwipingRight: this.prevImageScroll,
-          onSwipingLeft: this.nextImageScroll,
-          onSwiped: this.doMoveImage,
-          className: 'carousel-container',
-          ref: 'carouselContainer',
-          style: {
-            '-webkit-transform': 'translateX(' + delta + 'px)',
-            transition: this.state.delta === 0 ? transition : 'none',
-            width: this.state.containerWidth + 'px'
-          }
-        }, this.props.children.map(function (item, i) {
-          return React.DOM.div({ key: i, className: 'carousel-item' }, item)
-        }))
-      )
-    )
+    var swipeContainer = Swipeable({
+      onFlick: this.doMoveImage,
+      onSwipingRight: this.prevImageScroll,
+      onSwipingLeft: this.nextImageScroll,
+      onSwiped: this.doMoveImage,
+      className: 'carousel-container',
+      ref: 'carouselContainer',
+      style: {
+        '-webkit-transform': 'translateX(' + delta + 'px)',
+        transition: this.state.delta === 0 ? transition : 'none',
+        width: this.state.containerWidth + 'px'
+      }
+    }, this.props.children.map(function (item, i) {
+      return React.createElement('div', {
+        key: i,
+        className: 'carousel-item'
+      }, item)
+    }))
+
+    return React.createElement('div', {
+      className: 'carousel'
+    }, swipeContainer)
   }
 })
 
