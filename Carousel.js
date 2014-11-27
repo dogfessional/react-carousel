@@ -1,4 +1,5 @@
 var React = require('react')
+var assign = require('object-assign')
 
 var Swipeable = React.createFactory(require('react-swipeable'))
 
@@ -79,12 +80,18 @@ var Carousel = React.createClass({
 
     var transition = 'all 250ms ease-out'
 
+    var clear = React.createElement('div', {
+      style: {
+        height: 0,
+        visibility: 'hidden',
+        clear: 'left'
+      }
+    })
+
     var swipeContainer = Swipeable({
-      onFlick: this.doMoveImage,
       onSwipingRight: this.prevImageScroll,
       onSwipingLeft: this.nextImageScroll,
       onSwiped: this.doMoveImage,
-      className: 'carousel-container',
       ref: 'carouselContainer',
       style: {
         '-webkit-transform': 'translateX(' + delta + 'px)',
@@ -94,13 +101,16 @@ var Carousel = React.createClass({
     }, this.props.children.map(function (item, i) {
       return React.createElement('div', {
         key: i,
-        className: 'carousel-item'
+        style: { float: 'left' }
       }, item)
-    }))
+    }).concat(clear))
 
-    return React.createElement('div', {
-      className: 'carousel'
-    }, swipeContainer)
+    return React.createElement('div', assign({}, this.props, {
+      style: {
+        overflow: 'hidden',
+        width: '100%'
+      }
+    }), swipeContainer)
   }
 })
 

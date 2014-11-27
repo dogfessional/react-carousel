@@ -4,7 +4,7 @@ var Carousel = require('../')
 var SampleComponent = React.createFactory(React.createClass({
   render: function () {
     return (
-      <div style={{ width: 380 }}>
+      <div style={{ width: 320 }}>
         <Carousel>
           <img src="http://www.fillmurray.com/300/300" />
           <img src="http://www.fillmurray.com/300/299" />
@@ -17,4 +17,4 @@ var SampleComponent = React.createFactory(React.createClass({
   }
 }))
 
-React.render(SampleComponent(), document.body)
+React.render(SampleComponent(), document.getElementById('example'))

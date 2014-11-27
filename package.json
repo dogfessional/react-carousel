@@ -12,7 +12,8 @@
     "react-component"
   ],
   "dependencies": {
-    "react-swipeable": "^1.5.0"
+    "object-assign": "^2.0.0",
+    "react-swipeable": "^2.0.0"
   },
   "peerDependencies": {
     "react": ">=0.12.x"
