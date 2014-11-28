@@ -11,6 +11,7 @@ var Carousel = React.createClass({
       itemWidths: Array(this.props.children.length),
       itemStart: Array(this.props.children.length),
       containerWidth: 0,
+      canceled: false,
       delta: 0
     }
   },
@@ -40,9 +41,27 @@ var Carousel = React.createClass({
     return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 1000)
   },
 
-  doMoveImage: function (_, x) {
+  resetState: function (index, imageMoveIndex) {
+    this.setState({
+      prevIndex: imageMoveIndex,
+      currentIndex: index,
+      delta: 0,
+      canceled: false
+    })
+  },
+
+  doMoveImage: function (_, x, y) {
     var index = this.state.currentIndex
     var imageMoveIndex = this.state.currentIndex
+
+    if (Math.abs(y) > Math.abs(x)) {
+      return this.resetState(index, imageMoveIndex)
+    }
+
+    if (this.state.canceled) {
+      return this.resetState(index, imageMoveIndex)
+    }
+
     if (x < 0) {
       if (index > 0) {
         index = index - 1
@@ -55,22 +74,20 @@ var Carousel = React.createClass({
       }
     }
 
-    this.setState({
-      prevIndex: imageMoveIndex,
-      currentIndex: index,
-      delta: 0
-    })
+    return this.resetState(index, imageMoveIndex)
   },
 
   prevImageScroll: function (e, delta) {
     this.setState({
-      delta: this.addResistance(delta)
+      delta: this.addResistance(delta),
+      canceled: this.state.canceled || Math.abs(delta) < Math.abs(this.state.delta)
     })
   },
 
   nextImageScroll: function (e, delta) {
     this.setState({
-      delta: 0 - this.addResistance(delta)
+      delta: 0 - this.addResistance(delta),
+      canceled: this.state.canceled || Math.abs(delta) < Math.abs(this.state.delta)
     })
   },
 
@@ -94,7 +111,7 @@ var Carousel = React.createClass({
       onSwiped: this.doMoveImage,
       ref: 'carouselContainer',
       style: {
-        '-webkit-transform': 'translateX(' + delta + 'px)',
+        webkitTransform: 'translateX(' + delta + 'px)',
         transition: this.state.delta === 0 ? transition : 'none',
         width: this.state.containerWidth + 'px'
       }
