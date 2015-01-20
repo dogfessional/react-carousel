@@ -87,7 +87,7 @@ var Carousel = React.createClass({
       className: 'carousel-container',
       ref: 'carouselContainer',
       style: {
-        '-webkit-transform': 'translateX(' + delta + 'px)',
+        '-webkit-transform': 'translate3d(' + delta + 'px, 0, 0)',
         transition: this.state.delta === 0 ? transition : 'none',
         width: this.state.containerWidth + 'px'
       }
