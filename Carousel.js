@@ -1,5 +1,6 @@
 var React = require('react')
-var assign = require('object-assign')
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var Swipeable = React.createFactory(require('react-swipeable'))
 
@@ -17,7 +18,7 @@ var Carousel = React.createClass({
 
   componentDidMount: function () {
     var widths = Array.prototype.map.call(
-      this.refs.carouselContainer.getDOMNode().children,
+      React.findDOMNode(this.refs.carouselContainer).children,
       function (node) {
         return node.offsetWidth
       }
@@ -81,6 +82,7 @@ var Carousel = React.createClass({
     var transition = 'all 250ms ease-out'
 
     var clear = React.createElement('div', {
+      key: 'clear',
       style: {
         height: 0,
         visibility: 'hidden',
@@ -94,7 +96,7 @@ var Carousel = React.createClass({
       onSwiped: this.doMoveImage,
       ref: 'carouselContainer',
       style: {
-        '-webkit-transform': 'translate3d(' + delta + 'px, 0, 0)',
+        WebkitTransform: 'translate3d(' + delta + 'px, 0, 0)',
         transition: this.state.delta === 0 ? transition : 'none',
         width: this.state.containerWidth + 'px'
       }
@@ -105,7 +107,7 @@ var Carousel = React.createClass({
       }, item)
     }).concat(clear))
 
-    return React.createElement('div', assign({}, this.props, {
+    return React.createElement('div', _extends({}, this.props, {
       style: {
         overflow: 'hidden',
         width: '100%'
