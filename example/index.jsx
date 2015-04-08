@@ -1,5 +1,5 @@
 var React = require('react')
-var Carousel = require('../')
+var Carousel = require('../js/Carousel')
 
 var SampleComponent = React.createFactory(React.createClass({
   render: function () {

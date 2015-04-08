@@ -47,6 +47,16 @@ people to flip through each element one by one.
 
 [react-swipeable](https://github.com/dogfessional/react-swipeable)
 
+## Development
+
+Initial set up, run:
+    
+    npm install
+
+For watch on files, live reload, JSX transpiling and browserify, run:
+
+    gulp
+
 # License
 
 MIT
