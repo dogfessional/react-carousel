@@ -10,7 +10,7 @@ gulp.task('browserify', function() {
   var bundler = browserify({
     entries: ['./example/index.jsx'], // Only need initial file
     transform: [reactify], // Convert JSX to javascript
-    debug: true, cache: {}, packageCache: {}, fullPaths: true
+    debug: true, cache: {}, packageCache: {}, fullPaths: false
   });
 
   var watcher  = watchify(bundler);
