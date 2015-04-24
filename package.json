@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "react": "^0.13.2",
-    "react-swipeable": "^2.0.0"
+    "react-swipeable": "^3.0.0"
   },
   "peerDependencies": {
     "react": ">=0.13.x"
@@ -25,9 +25,9 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "browserify": "^9.0.7",
     "gulp": "^3.8.11",
     "gulp-react": "^3.0.1",
-    "browserify": "^9.0.7",
     "reactify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.1.0"

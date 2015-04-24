@@ -1,7 +1,7 @@
 var React = require('react')
 var Carousel = require('../js/Carousel')
 
-var SampleComponent = React.createFactory(React.createClass({
+var SampleComponent = React.createClass({
   render: function () {
     return (
       <div style={{ width: 320 }}>
@@ -15,6 +15,6 @@ var SampleComponent = React.createFactory(React.createClass({
       </div>
     )
   }
-}))
+})
 
-React.render(SampleComponent(), document.getElementById('example'))
+React.render(<SampleComponent />, document.getElementById('example'))
