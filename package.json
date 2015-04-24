@@ -12,6 +12,7 @@
     "react-component"
   ],
   "dependencies": {
+    "react": "^0.13.2",
     "react-swipeable": "^2.0.0"
   },
   "peerDependencies": {
