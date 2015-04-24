@@ -1,7 +1,6 @@
 var React = require('react')
-var assign = require('object-assign')
 
-var Swipeable = React.createFactory(require('react-swipeable'))
+var Swipeable = require('react-swipeable')
 
 var Carousel = React.createClass({
   getInitialState: function () {
@@ -18,7 +17,7 @@ var Carousel = React.createClass({
 
   componentDidMount: function () {
     var widths = Array.prototype.map.call(
-      this.refs.carouselContainer.getDOMNode().children,
+      React.findDOMNode(this.refs.carouselContainer).children,
       function (node) {
         return node.offsetWidth
       }
@@ -97,37 +96,36 @@ var Carousel = React.createClass({
 
     var transition = 'all 250ms ease-out'
 
-    var clear = React.createElement('div', {
-      style: {
-        height: 0,
-        visibility: 'hidden',
-        clear: 'left'
-      }
+    var clear = (<div style={{height: 0, visibility: 'hidden', clear: 'left'}}></div>)
+
+    var swipeContainerChildren = this.props.children.map(function (item, i) {
+      return (
+        <div key={i} style={{float: 'left'}}>
+          {item}
+        </div>
+      )
     })
 
-    var swipeContainer = Swipeable({
-      onSwipingRight: this.prevImageScroll,
-      onSwipingLeft: this.nextImageScroll,
-      onSwiped: this.doMoveImage,
-      ref: 'carouselContainer',
-      style: {
-        webkitTransform: 'translateX(' + delta + 'px)',
-        transition: this.state.delta === 0 ? transition : 'none',
-        width: this.state.containerWidth + 'px'
-      }
-    }, this.props.children.map(function (item, i) {
-      return React.createElement('div', {
-        key: i,
-        style: { float: 'left' }
-      }, item)
-    }).concat(clear))
+    var swipeContainer = (
+      <Swipeable onSwipingRight={this.prevImageScroll}
+        onSwipingLeft={this.nextImageScroll}
+        onSwiped={this.doMoveImage}
+        ref="carouselContainer"
+        style={{
+          WebkitTransform: 'translate3d(' + delta + 'px, 0, 0)',
+          transition: this.state.delta === 0 ? transition : 'none',
+          width: this.state.containerWidth
+        }} >
+          {swipeContainerChildren}
+          {clear}
+      </Swipeable>
+    )
 
-    return React.createElement('div', assign({}, this.props, {
-      style: {
-        overflow: 'hidden',
-        width: '100%'
-      }
-    }), swipeContainer)
+    return (
+      <div {...this.props} style={{overflow: 'hidden', width: '100%'}}>
+        {swipeContainer}
+      </div>
+    )
   }
 })
 
