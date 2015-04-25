@@ -12,21 +12,16 @@ var Carousel = React.createClass({displayName: "Carousel",
       containerWidth: 0,
       canceled: false,
       delta: 0
-    }
+    };
   },
 
   componentDidMount: function () {
-    var widths = Array.prototype.map.call(
-      React.findDOMNode(this.refs.carouselContainer).children,
-      function (node) {
-        return node.offsetWidth
-      }
-    )
-
-    var totalWidth = widths.reduce(function (a, b) { return a + b }, 0)
+    var itemWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    var count = React.Children.count(this.props.children);
+    var totalWidth = itemWidth * count;
     var startPos = widths.reduce(function (total, width) {
-      total.push(total[total.length - 1] + width)
-      return total
+      total.push(total[total.length - 1] + width);
+      return total;
     }, [0])
 
     this.setState({
@@ -37,7 +32,7 @@ var Carousel = React.createClass({displayName: "Carousel",
   },
 
   addResistance: function (delta) {
-    return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 1000)
+    return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 1000);
   },
 
   resetState: function (index, imageMoveIndex) {
@@ -46,34 +41,34 @@ var Carousel = React.createClass({displayName: "Carousel",
       currentIndex: index,
       delta: 0,
       canceled: false
-    })
+    });
   },
 
   doMoveImage: function (_, x, y) {
-    var index = this.state.currentIndex
-    var imageMoveIndex = this.state.currentIndex
+    var index = this.state.currentIndex;
+    var imageMoveIndex = this.state.currentIndex;
 
     if (Math.abs(y) > Math.abs(x)) {
-      return this.resetState(index, imageMoveIndex)
+      return this.resetState(index, imageMoveIndex);
     }
 
     if (this.state.canceled) {
-      return this.resetState(index, imageMoveIndex)
+      return this.resetState(index, imageMoveIndex);
     }
 
     if (x < 0) {
       if (index > 0) {
-        index = index - 1
-        imageMoveIndex = index
+        index = index - 1;
+        imageMoveIndex = index;
       }
     } else if (x > 0) {
       if (index < this.props.children.length - 1) {
-        index = index + 1
-        imageMoveIndex = imageMoveIndex
+        index = index + 1;
+        imageMoveIndex = imageMoveIndex;
       }
     }
 
-    return this.resetState(index, imageMoveIndex)
+    return this.resetState(index, imageMoveIndex);
   },
 
   prevImageScroll: function (e, delta) {
