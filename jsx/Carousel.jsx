@@ -90,6 +90,25 @@ var Carousel = React.createClass({
     })
   },
 
+  renderIndicator: function() {
+    var indicator = [];
+    var count = React.Children.count(this.props.children);
+    for (var i = 0; i < count; i++) {
+      if (this.state.currentIndex === i) {
+        indicator.push(<li className="active" key={i}></li>);
+      }
+      else {
+        indicator.push(<li key={i}></li>);
+      }
+    }
+
+    return (
+      <ul className="carousel-indicator">
+        {indicator}
+      </ul>
+    );
+  },
+
   render: function () {
     var delta = this.state.delta +
       (0 - this.state.itemStart[this.state.currentIndex])
@@ -124,6 +143,7 @@ var Carousel = React.createClass({
     return (
       <div {...this.props} style={{overflow: 'hidden', width: '100%'}}>
         {swipeContainer}
+        {this.props.showIndicator && this.renderIndicator()}
       </div>
     )
   }

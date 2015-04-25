@@ -10,6 +10,7 @@ var Carousel = React.createClass({displayName: "Carousel",
       itemWidths: Array(this.props.children.length),
       itemStart: Array(this.props.children.length),
       containerWidth: 0,
+      canceled: false,
       delta: 0
     }
   },
@@ -39,9 +40,27 @@ var Carousel = React.createClass({displayName: "Carousel",
     return delta * (1 - parseInt(Math.sqrt(Math.pow(delta, 2)), 10) / 1000)
   },
 
-  doMoveImage: function (_, x) {
+  resetState: function (index, imageMoveIndex) {
+    this.setState({
+      prevIndex: imageMoveIndex,
+      currentIndex: index,
+      delta: 0,
+      canceled: false
+    })
+  },
+
+  doMoveImage: function (_, x, y) {
     var index = this.state.currentIndex
     var imageMoveIndex = this.state.currentIndex
+
+    if (Math.abs(y) > Math.abs(x)) {
+      return this.resetState(index, imageMoveIndex)
+    }
+
+    if (this.state.canceled) {
+      return this.resetState(index, imageMoveIndex)
+    }
+
     if (x < 0) {
       if (index > 0) {
         index = index - 1
@@ -54,23 +73,40 @@ var Carousel = React.createClass({displayName: "Carousel",
       }
     }
 
-    this.setState({
-      prevIndex: imageMoveIndex,
-      currentIndex: index,
-      delta: 0
-    })
+    return this.resetState(index, imageMoveIndex)
   },
 
   prevImageScroll: function (e, delta) {
     this.setState({
-      delta: this.addResistance(delta)
+      delta: this.addResistance(delta),
+      canceled: this.state.canceled || Math.abs(delta) < Math.abs(this.state.delta)
     })
   },
 
   nextImageScroll: function (e, delta) {
     this.setState({
-      delta: 0 - this.addResistance(delta)
+      delta: 0 - this.addResistance(delta),
+      canceled: this.state.canceled || Math.abs(delta) < Math.abs(this.state.delta)
     })
+  },
+
+  renderIndicator: function() {
+    var indicator = [];
+    var count = React.Children.count(this.props.children);
+    for (var i = 0; i < count; i++) {
+      if (this.state.currentIndex === i) {
+        indicator.push(React.createElement("li", {className: "active", key: i}));
+      }
+      else {
+        indicator.push(React.createElement("li", {key: i}));
+      }
+    }
+
+    return (
+      React.createElement("ul", {className: "carousel-indicator"}, 
+        indicator
+      )
+    );
   },
 
   render: function () {
@@ -106,10 +142,10 @@ var Carousel = React.createClass({displayName: "Carousel",
 
     return (
       React.createElement("div", React.__spread({},  this.props, {style: {overflow: 'hidden', width: '100%'}}), 
-        swipeContainer
+        swipeContainer, 
+        this.props.showIndicator && this.renderIndicator()
       )
     )
-
   }
 })
 
