@@ -36,7 +36,11 @@ var SampleComponent = React.createClass({
 
 # Props
 
-Carousel does not take any props.
+**showIndicator**
+
+_Type:_ Boolean _Defaults:_ `undefined`
+
+To make indicator show up properly, add styles for `.carousel-indicator` and it's descendants accordingly.
 
 # Children
 
@@ -50,7 +54,7 @@ people to flip through each element one by one.
 ## Development
 
 Initial set up, run:
-    
+
     npm install
 
 For watch on files, live reload, JSX transpiling and browserify, run:
