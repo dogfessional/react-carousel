@@ -1,12 +1,7 @@
 # Carousel
+* Deprecated *
 
 > A carousel for the mobile web
-
-## Install
-
-```sh
-npm install react-carousel
-```
 
 ## Demo
 
